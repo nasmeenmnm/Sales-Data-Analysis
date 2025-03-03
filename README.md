@@ -69,6 +69,13 @@ This Power BI project presents an **E-Commerce Sales Dashboard** designed to ana
   - **Y-Axis:** Number of Orders  
 
 ---
+## Images
+![sales overview](https://github.com/user-attachments/assets/5cf9c4a5-2a93-46dd-85ca-8899ef70dc23)
+![sales Shipment](https://github.com/user-attachments/assets/7363cb96-50ce-4e58-a474-87973264b99a)
+![sales Sale](https://github.com/user-attachments/assets/8868197c-e9fe-4a73-afb5-ece9a8884e26)
+![Sales Profit](https://github.com/user-attachments/assets/d1643eff-7ec0-45ae-9a67-1adfb15d1903)
+![sales customer](https://github.com/user-attachments/assets/d8c1a762-ab59-45b1-915c-02b966045ce5)
+
 
 ## 🖩 DAX Measures Used  
 
