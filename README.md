@@ -1,37 +1,113 @@
 # 📊 E-Commerce Sales Dashboard (Power BI)
 
 ## 📍 Overview  
-This Power BI project presents an **E-Commerce Sales Dashboard** designed to analyze sales, customer insights, profitability, and shipping performance. The dashboard helps businesses make data-driven decisions using **interactive visualizations and DAX calculations**.
+This Power BI project presents an **E-Commerce Sales Dashboard** designed to analyze **sales performance, customer insights, profitability, and shipping efficiency**. The dashboard provides **interactive visualizations and DAX calculations** to help businesses make **data-driven decisions**.
+
+---
 
 ## 📂 Dataset  
 - **Source:** Global Superstore Dataset  
-- **Key Columns:** Order ID, Product Name, Customer Name, Category, Sub-Category, Sales, Profit, Discount, Shipping Cost, Order Date, Ship Date, and Country.  
+- **Key Columns:**  
+  - `Order ID`, `Product Name`, `Customer Name`, `Category`, `Sub-Category`, `Sales`, `Profit`, `Discount`, `Shipping Cost`, `Order Date`, `Ship Date`, `Country`, `Region`  
 
-## 📈 Key Features  
-🔹 **Sales Analysis:**  
-- Top 10 best-selling products (Bar Chart)  
-- Monthly sales trends (Line Chart)  
-- Sales contribution by product category (Pie Chart)  
+---
 
-🔹 **Customer Insights:**  
-- Customer distribution by country (Map Visualization)  
-- Top 10 customers by total sales (Table with Ranking)  
+## 📊 Key Features & Visuals  
 
-🔹 **Profitability Analysis:**  
-- Profit vs. Sales comparison (Scatter Plot)  
-- Profit by product category (Clustered Column Chart)  
+### 📌 **1. Sales Analysis**  
+✅ **Top 10 Best-Selling Products** → *(Clustered Column Chart)*  
+  - **X-Axis:** Product Name  
+  - **Y-Axis:** Sum of Sales  
+  - **Filter:** Top 10 by Sales  
 
-🔹 **Shipping Performance:**  
-- Impact of shipping cost on profit (Scatter Plot)  
-- Average processing time for orders  
+✅ **Sales Trend Over Time** → *(Line Chart)*  
+  - **X-Axis:** Order Date (Month-Year)  
+  - **Y-Axis:** Sum of Sales  
 
-🔹 **Advanced Tooltips:**  
-- **Customer Count by Country**  
-- **Profit by Country**  
+✅ **Sales by Category & Sub-Category** → *(Pie Chart & Bar Chart)*  
+  - **Legend:** Category  
+  - **Values:** Sales  
 
-## 📌 DAX Measures Used  
+---
+
+### 📌 **2. Customer Insights**  
+✅ **Customer Count by Country** → *(Map Visualization)*  
+  - **Location:** Country  
+  - **Size:** Customer Count  
+
+✅ **Top 10 Customers by Sales** → *(Table with Ranking)*  
+  - Columns: Customer Name, Total Sales  
+  - Sorted by: Total Sales (Descending)  
+
+---
+
+### 📌 **3. Profitability Analysis**  
+✅ **Profit vs. Sales** → *(Scatter Plot)*  
+  - **X-Axis:** Sales  
+  - **Y-Axis:** Profit  
+  - **Size:** Discount  
+
+✅ **Profit by Product Category** → *(Clustered Column Chart)*  
+  - **X-Axis:** Category  
+  - **Y-Axis:** Profit  
+
+✅ **Profit by Country** → *(Tooltip in Map Chart)*  
+  - **Tooltip Value:** Profit  
+
+---
+
+### 📌 **4. Shipping Performance**  
+✅ **Impact of Shipping Cost on Profit** → *(Scatter Plot)*  
+  - **X-Axis:** Shipping Cost  
+  - **Y-Axis:** Profit  
+
+✅ **Average Processing Time** → *(KPI Card & Table)*  
+  - Order Processing Time = Order Date → Ship Date  
+
+✅ **Orders by Shipping Mode** → *(Stacked Bar Chart)*  
+  - **X-Axis:** Shipping Mode  
+  - **Y-Axis:** Number of Orders  
+
+---
+
+## 🖩 DAX Measures Used  
+
 ```DAX
+-- 💰 Total Sales Calculation
 Total Sales = SUM('Global-Superstore'[Sales])
+
+-- 📈 Total Profit Calculation
 Total Profit = SUM('Global-Superstore'[Profit])
-Avg Sales per Customer = DIVIDE([Total Sales], DISTINCTCOUNT('Global-Superstore'[Customer Name]))
-Avg Processing Time = AVERAGEX('Global-Superstore', DATEDIFF('Global-Superstore'[Order Date], 'Global-Superstore'[Ship Date], DAY))
+
+-- 🏆 Top Customers (Top 10 by Sales)
+Top Customers = 
+TOPN(10, 
+    SUMMARIZE('Global-Superstore', 
+        'Global-Superstore'[Customer Name], 
+        "Total Sales", [Total Sales]
+    ), 
+    [Total Sales], DESC
+)
+
+-- 📊 Average Sales per Customer
+Avg Sales per Customer = 
+DIVIDE([Total Sales], DISTINCTCOUNT('Global-Superstore'[Customer Name]))
+
+-- ⏳ Average Processing Time (Days)
+Avg Processing Time = 
+AVERAGEX('Global-Superstore', 
+    DATEDIFF('Global-Superstore'[Order Date], 'Global-Superstore'[Ship Date], DAY)
+)
+
+-- 🚚 Shipping Cost Impact on Profit
+Profit per Shipping Cost = 
+DIVIDE([Total Profit], SUM('Global-Superstore'[Shipping Cost]))
+
+-- 📍 Customer Count by Country
+Customer Count = DISTINCTCOUNT('Global-Superstore'[Customer Name])
+
+-- 📌 Profit by Country
+Profit by Country = 
+SUMX(FILTER('Global-Superstore', 'Global-Superstore'[Country] = SELECTEDVALUE('Global-Superstore'[Country])),
+    'Global-Superstore'[Profit]
+)
